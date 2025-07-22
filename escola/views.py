@@ -25,6 +25,7 @@ class MatriculaViewSet(viewsets.ModelViewSet):
     queryset = Matricula.objects.all().order_by('id')
     serializer_class = MatriculaSerializer
     throttle_classes = [UserRateThrottle, MatriculaAnonRateThrottle]
+    http_method_names = ['get', 'post']
 
 class ListaMatriculaEstudante(generics.ListAPIView):
     """Listando as matrículas de um estudante"""
