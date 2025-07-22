@@ -2,12 +2,13 @@ from .models import Estudante, Curso, Matricula
 from .serializers import EstudanteSerializer, CursoSerializer, MatriculaSerializer, ListaMatriculaCursoSerializer, ListaMatriculaEstudanteSerializer, EstudanteSerializerV2
 from rest_framework import viewsets, generics, filters
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.throttling import UserRateThrottle
+from .throttles import MatriculaAnonRateThrottle
 
 
 class EstudanteViewSet(viewsets.ModelViewSet):
     """Exibindo todos os estudantes"""
     queryset = Estudante.objects.all().order_by('id')
-    #serializer_class = EstudanteSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     ordering_fields = ['nome']
     search_fields = ['nome', 'cpf']
@@ -23,6 +24,7 @@ class CursoViewSet(viewsets.ModelViewSet):
 class MatriculaViewSet(viewsets.ModelViewSet):
     queryset = Matricula.objects.all().order_by('id')
     serializer_class = MatriculaSerializer
+    throttle_classes = [UserRateThrottle, MatriculaAnonRateThrottle]
 
 class ListaMatriculaEstudante(generics.ListAPIView):
     """Listando as matrículas de um estudante"""
