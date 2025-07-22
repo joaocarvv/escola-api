@@ -65,25 +65,31 @@ class MatriculaViewSet(viewsets.ModelViewSet):
 class ListaMatriculaEstudante(generics.ListAPIView):
     """
     Descrição da View:
-    - Lista Matriculas por id de Estudante
+    - Lista Matrículas por id de Estudante
+
     Parâmetros:
-    - pk (int): O identificador primário do objeto. Deve ser um número inteiro.
+    - pk (int): O identificador primário do estudante.
     """
     def get_queryset(self):
-        queryset = Matricula.objects.filter(estudante_id=self.kwargs['pk']).order_by('id')
-        return queryset
+        if getattr(self, 'swagger_fake_view', False):
+            return Matricula.objects.none()
+        return Matricula.objects.filter(estudante_id=self.kwargs['pk']).order_by('id')
+
     serializer_class = ListaMatriculaEstudanteSerializer
 
 class ListaMatriculaCurso(generics.ListAPIView):
     """
     Descrição da View:
-    - Lista Matriculas por id de Curso
+    - Lista Matrículas por id de Curso
+
     Parâmetros:
-    - pk (int): O identificador primário do objeto. Deve ser um número inteiro.
+    - pk (int): O identificador primário do curso.
     """
     def get_queryset(self):
-        queryset = Matricula.objects.filter(curso_id=self.kwargs['pk']).order_by('id')
-        return queryset
+        if getattr(self, 'swagger_fake_view', False):
+            return Matricula.objects.none()
+        return Matricula.objects.filter(curso_id=self.kwargs['pk']).order_by('id')
+
     serializer_class = ListaMatriculaCursoSerializer
 
 
